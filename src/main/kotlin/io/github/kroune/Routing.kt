@@ -53,62 +53,6 @@ fun Application.configureRouting() {
             log.info("provided an artifact = $type, branch = $branch, commit = $commit")
             return@get
         }
-        get("upload") {
-            val file = this.javaClass.getResourceAsStream("/upload/index.html").readAllBytes()
-            call.respondBytes(file)
-//            call.respondHtml(HttpStatusCode.OK) {
-//                head {
-//                    title {
-//                        +"Upload artifacts manually"
-//                    }
-//                }
-//                body {
-//                    form(
-//                        action = "/upload-manually",
-//                        method = FormMethod.get
-//                    ) {
-//                        p {
-//                            +"Secret token"
-//                            textInput(
-//                                name = "auth_token"
-//                            ) {
-//                            }
-//                        }
-//                        p {
-//                            +"branch"
-//                            textInput(
-//                                name = "branch"
-//                            ) {
-//                            }
-//                        }
-//                        p {
-//                            +"commit"
-//                            textInput(
-//                                name = "commit"
-//                            ) {
-//                            }
-//                        }
-//                        p {
-//                            +"type"
-//                            textInput(
-//                                name = "type"
-//                            ) {
-//                            }
-//                        }
-//                        p {
-//                            +"file"
-//                            fileInput (
-//                                name = "type"
-//                            ) {
-//                            }
-//                        }
-//                        p {
-//                            submitInput { value = "Upload" }
-//                        }
-//                    }
-//                }
-//            }
-        }
         // Static plugin. Try to access `/static/index.html`
         staticResources("/", "static")
     }
