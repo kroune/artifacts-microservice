@@ -17,11 +17,14 @@ application {
 repositories {
     mavenCentral()
     maven { url = uri("https://jitpack.io") }
+    maven {
+        url = uri("https://packages.confluent.io/maven")
+        name = "confluence"
+    }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.11.0")
-    implementation("io.ktor:ktor-server-html-builder")
+    implementation(libs.ktor.server.rate.limit)
     implementation(libs.ktor.server.core.jvm)
     implementation(libs.ktor.server.host.common.jvm)
     implementation(libs.ktor.server.call.logging.jvm)

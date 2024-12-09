@@ -1,0 +1,98 @@
+openapi: "3.1.0"
+info:
+  title: "artifacts microservice API"
+  description: "artifacts microservice API"
+  version: "1.0.0"
+servers:
+  - url: "http://nine-men-s-morris.me/artifacts-service"
+paths:
+  /artifact:
+    get:
+      description: ""
+      parameters:
+        - name: "type"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "commit"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "branch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "404":
+          description: "Not Found"
+          content:
+            'default':
+              schema:
+                description: if no artifacts matching this request were found
+        "200":
+          description: "OK"
+          content:
+            'default':
+              schema:
+                type: "object"
+            text/plain:
+              schema:
+                description: artifact, as a byte array
+                type: "string"
+                format: "byte"
+  /upload:
+    post:
+      description: ""
+      parameters:
+        - name: "auth_token"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "commit"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "branch"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          'default':
+            schema:
+              description: Artifact file as a byte array
+              type: "array"
+              items:
+                type: "string"
+                format: "byte"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            'default':
+              schema:
+                description: If token parameter isn't valid
+        "400":
+          description: "Bad Request"
+          content:
+            'deafult':
+              schema:
+                description: If type or branch or commit or file is empty
+        "200":
+          description: "OK"
+          content:
+            'default':
+              schema:
+                description: If artifact was uploaded successfully

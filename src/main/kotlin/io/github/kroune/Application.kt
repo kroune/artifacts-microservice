@@ -4,7 +4,9 @@ import io.github.kroune.local.artifactsRepository
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.ratelimit.*
 import org.jetbrains.exposed.sql.Database
+import kotlin.time.Duration.Companion.seconds
 
 val globalAuthToken = System.getenv("auth_token")!!.also { value ->
     require(
@@ -33,6 +35,11 @@ fun Application.module() {
         user = "postgres",
         password = "1234"
     )
+    install(RateLimit) {
+        global {
+            rateLimiter(10, 10.seconds, 5)
+        }
+    }
     artifactsRepository
     configureMonitoring()
     configureRouting()

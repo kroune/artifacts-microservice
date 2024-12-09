@@ -1,4 +1,5 @@
-This Project is a microservice create for the "Nine men's morris" ecosystem
+# This Project is a microservice create for the "Nine men's morris" ecosystem
 <br>
-it
 
+
+## [Api specification](artificats-openapi.yaml)

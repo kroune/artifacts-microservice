@@ -21,6 +21,7 @@ ktor-server-test = { group = "io.ktor", name = "ktor-server-test-host", version.
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback_version" }
 kotlin-test-junit = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+ktor-server-rate-limit = { group = "io.ktor", name = "ktor-server-rate-limit", version.ref = "ktor" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin_serialization" }
 exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed_version" }
 exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed_version" }
