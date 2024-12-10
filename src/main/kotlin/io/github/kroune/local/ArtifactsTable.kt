@@ -5,10 +5,11 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
 object ArtifactsTable : Table("artifacts") {
     val type = varchar("type", 255)
-    val commit = varchar("commit", 255).uniqueIndex()
+    val commit = varchar("commit", 255)
     val branch = varchar("branch", 255)
+    val platform = varchar("platform", 255)
     val artifacts = blob("artifact", true)
     val timeStamp = datetime("time_stamp")
 
-    override val primaryKey = PrimaryKey(commit)
+    override val primaryKey = PrimaryKey(commit, platform)
 }

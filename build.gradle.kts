@@ -23,6 +23,10 @@ repositories {
     }
 }
 
+tasks.withType<Test> {
+    environment["auth_token"] = "someExample0TokenDontFuckingUseInProd1"
+}
+
 dependencies {
     implementation(libs.ktor.server.rate.limit)
     implementation(libs.ktor.server.core.jvm)
@@ -46,7 +50,9 @@ dependencies {
     implementation(libs.opentelemetry.exporter.otlp)
     implementation(libs.opentelemetry.ktor)
 
+    // testing
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.test.container.postgresql)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test)
-    testImplementation(libs.ktor.server.test.host.jvm)
-    testImplementation(libs.kotlin.test.junit)
 }

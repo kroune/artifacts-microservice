@@ -22,19 +22,21 @@ fun main() {
         .start(wait = true)
 }
 
-fun Application.module() {
+fun Application.module(connectToDb: Boolean = true) {
     // check if it is valid
     globalAuthToken
-    val isInK8s = System.getenv("IS_IN_K8S") == "1"
-    val localhost = "127.0.0.1:5432"
-    val podDomain = "postgres-service.default.svc.cluster.local"
-    val url = if (isInK8s) podDomain else localhost
-    Database.connect(
-        "jdbc:postgresql://$url/postgres",
-        driver = "org.postgresql.Driver",
-        user = "postgres",
-        password = "1234"
-    )
+    if (connectToDb) {
+        val isInK8s = System.getenv("IS_IN_K8S") == "1"
+        val localhost = "127.0.0.1:5432"
+        val podDomain = "postgres-service.default.svc.cluster.local"
+        val url = if (isInK8s) podDomain else localhost
+        Database.connect(
+            "jdbc:postgresql://$url/postgres",
+            driver = "org.postgresql.Driver",
+            user = "postgres",
+            password = "1234"
+        )
+    }
     install(RateLimit) {
         global {
             rateLimiter(10, 10.seconds, 5)

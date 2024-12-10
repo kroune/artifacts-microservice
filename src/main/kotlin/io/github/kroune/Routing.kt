@@ -15,6 +15,7 @@ fun Application.configureRouting() {
                 val parameters = call.receiveParameters()
                 val authToken = parameters["auth_token"]
                 val type = parameters["type"]
+                val platform = parameters["platform"]
                 val commit = parameters["commit"]
                 val branch = parameters["branch"]
 
@@ -26,7 +27,12 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.Unauthorized)
                     return@post
                 }
-                if (commit == null || branch == null || type == null) {
+                if (commit == null || branch == null || type == null || platform == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
+                val resolvedPlatform = platform.decodeToPlatformType()
+                if (resolvedPlatform == null) {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
@@ -35,7 +41,8 @@ fun Application.configureRouting() {
                     artifactValue = file,
                     branchValue = branch,
                     typeValue = type,
-                    commitValue = commit
+                    commitValue = commit,
+                    platformValue = resolvedPlatform
                 )
                 call.respond(HttpStatusCode.OK)
                 return@post
@@ -44,8 +51,18 @@ fun Application.configureRouting() {
                 val type = call.parameters["type"]
                 val commit = call.parameters["commit"]
                 val branch = call.parameters["branch"]
+                val platform = call.parameters["platform"]?.decodeToPlatformType()
+                if (platform == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@get
+                }
                 val artifact =
-                    artifactsRepository.getArtifact(branchValue = branch, typeValue = type, commitValue = commit)
+                    artifactsRepository.getArtifact(
+                        branchValue = branch,
+                        typeValue = type,
+                        commitValue = commit,
+                        platformType = platform
+                    )
                 if (artifact == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@get

@@ -1,5 +1,6 @@
 package io.github.kroune.local.artifacts
 
+import io.github.kroune.PlatformType
 import io.github.kroune.local.ArtifactsTable
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -21,7 +22,8 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
         artifactValue: ByteArray,
         branchValue: String,
         typeValue: String,
-        commitValue: String
+        commitValue: String,
+        platformValue: PlatformType
     ) {
         newSuspendedTransaction {
             ArtifactsTable.insert {
@@ -30,11 +32,17 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
                 it[type] = typeValue
                 it[commit] = commitValue
                 it[timeStamp] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+                it[platform] = platformValue.encodeToString()
             }
         }
     }
 
-    override suspend fun getArtifact(branchValue: String?, typeValue: String?, commitValue: String?): ByteArray? {
+    override suspend fun getArtifact(
+        branchValue: String?,
+        typeValue: String?,
+        commitValue: String?,
+        platformType: PlatformType
+    ): ByteArray? {
         return newSuspendedTransaction {
             ArtifactsTable.select(ArtifactsTable.artifacts).where {
                 val branch =
@@ -52,7 +60,7 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
                         (ArtifactsTable.commit eq commitValue)
                     else
                         Op.TRUE)
-                branch and type and commit
+                branch and type and commit and (ArtifactsTable.platform eq platformType.encodeToString())
             }.limit(1).map {
                 it[ArtifactsTable.artifacts].bytes
             }.firstOrNull()
