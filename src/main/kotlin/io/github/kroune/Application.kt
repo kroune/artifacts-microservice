@@ -8,7 +8,7 @@ import io.ktor.server.plugins.ratelimit.*
 import org.jetbrains.exposed.sql.Database
 import kotlin.time.Duration.Companion.seconds
 
-val globalAuthToken = System.getenv("auth_token")!!.also { value ->
+val globalAuthToken = System.getenv("auth_token")!!.trim().also { value ->
     require(
         value.any { it.isDigit() }
                 && value.any { it.isLetter() }
