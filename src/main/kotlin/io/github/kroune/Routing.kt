@@ -33,6 +33,10 @@ fun Application.configureRouting() {
                     return@post
                 }
                 val file = call.receive<ByteArray>()
+                if (file.isEmpty()) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
                 artifactsRepository.uploadArtifact(
                     artifactValue = file,
                     branchValue = branch,
