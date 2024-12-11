@@ -12,7 +12,7 @@ fun Application.configureRouting() {
     routing {
         route("/artifacts-service") {
             post("/upload") {
-                val parameters = call.receiveParameters()
+                val parameters = call.parameters
                 val authToken = parameters["auth_token"]
                 val type = parameters["type"]
                 val platform = parameters["platform"]
@@ -20,10 +20,6 @@ fun Application.configureRouting() {
                 val branch = parameters["branch"]
 
                 if (authToken != globalAuthToken) {
-                    println(authToken)
-                    println(commit)
-                    println(type)
-                    println(branch)
                     call.respond(HttpStatusCode.Unauthorized)
                     return@post
                 }
