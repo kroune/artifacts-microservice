@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.ktor.server.core.jvm)
     implementation(libs.ktor.server.host.common.jvm)
     implementation(libs.ktor.server.call.logging.jvm)
+    implementation(libs.ktor.server.status.pages)
     implementation(libs.hayden.khealth)
     implementation(libs.ktor.server.netty.jvm)
     implementation(libs.logback.classic)

@@ -73,7 +73,7 @@ fun Application.configureRouting() {
                 return@get
             }
             // Static plugin. Try to access `/static/index.html`
-            staticResources("/", "static")
+            staticResources("/", "/static")
         }
     }
 }

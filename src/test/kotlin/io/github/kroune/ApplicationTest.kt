@@ -15,7 +15,7 @@ class ApplicationTest {
         application {
             module(false)
         }
-        client.get("/artifacts-service/").apply {
+        client.get("/artifacts-service/dsadasdas").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
     }
