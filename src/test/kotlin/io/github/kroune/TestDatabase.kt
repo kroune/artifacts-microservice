@@ -13,39 +13,39 @@ class TestDatabase {
         start() // Start the container
     }
 
-    suspend fun addDummyArtifacts() {
+    suspend fun addDummyArtifacts(publishType: PublishType = PublishType.Testing, branch: String = "main") {
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-android.apk")!!.readBytes(),
-            "main",
-            "test",
+            branch,
+            publishType,
             "commitId",
             PlatformType.Android
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-linux.deb")!!.readBytes(),
-            "main",
-            "test",
+            branch,
+            publishType,
             "commitId",
             PlatformType.Linux
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-macos.dmg")!!.readBytes(),
-            "main",
-            "test",
+            branch,
+            publishType,
             "commitId",
             PlatformType.Macos
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-web.zip")!!.readBytes(),
-            "main",
-            "test",
+            branch,
+            publishType,
             "commitId",
             PlatformType.Web
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-windows.exe")!!.readBytes(),
-            "main",
-            "test",
+            branch,
+            publishType,
             "commitId",
             PlatformType.Windows
         )

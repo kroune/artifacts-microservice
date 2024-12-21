@@ -1,5 +1,6 @@
 package io.github.kroune
 
+import io.github.kroune.ConfigurationLoader.currentConfig
 import io.github.kroune.local.artifactsRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -19,7 +20,7 @@ fun Application.configureRouting() {
                 val commit = parameters["commit"]
                 val branch = parameters["branch"]
 
-                if (authToken != globalAuthToken) {
+                if (authToken != currentConfig.authToken) {
                     call.respond(HttpStatusCode.Unauthorized)
                     return@post
                 }
@@ -32,6 +33,11 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
+                val resolvedType = type.decodeToPublishType()
+                if (resolvedType == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
                 val file = call.receive<ByteArray>()
                 if (file.isEmpty()) {
                     call.respond(HttpStatusCode.BadRequest)
@@ -40,7 +46,7 @@ fun Application.configureRouting() {
                 artifactsRepository.uploadArtifact(
                     artifactValue = file,
                     branchValue = branch,
-                    typeValue = type,
+                    typeValue = resolvedType,
                     commitValue = commit,
                     platformValue = resolvedPlatform
                 )
@@ -56,10 +62,11 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.BadRequest)
                     return@get
                 }
+                val resolvedType = type?.decodeToPublishType() ?: PublishType.Release
                 val artifact =
                     artifactsRepository.getArtifact(
                         branchValue = branch,
-                        typeValue = type,
+                        typeValue = resolvedType,
                         commitValue = commit,
                         platformType = platform
                     )

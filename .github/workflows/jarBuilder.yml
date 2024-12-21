@@ -21,6 +21,12 @@ jobs:
           java-version: 20
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Create example config
+        run: |
+          sudo mkdir /etc/game-server/
+          sudo chmod -R ugo+rws /etc/artifacts-server/
+          touch /etc/artifacts-server/config.yaml
+          echo -n ${{ secrets.TEST_CONFIG }} | base64 -d  >> /etc/artifacts-server/config.yaml
       - name: Run tests
         run: gradle test
       - name: Build jar

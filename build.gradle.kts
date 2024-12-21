@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.logback.classic)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlin.yaml)
 
     // db
     implementation(libs.exposed.core)

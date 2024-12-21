@@ -22,7 +22,7 @@ class ApplicationTest {
     }
 
     @Test
-    fun testUploadAuth() = testApplication {
+    fun testUploadAuthMissingParameters() = testApplication {
         TestDatabase().connect()
         application {
             module(false)
@@ -51,10 +51,30 @@ class ApplicationTest {
     }
 
     @Test
-    fun testGetArtifactsForAndroid() = testApplication {
+    fun testGetArtifactsForAndroidPublishTypeMismatch() = testApplication {
         TestDatabase().apply {
             connect()
             addDummyArtifacts()
+        }
+        application {
+            module(false)
+        }
+
+        client.get("/artifacts-service/artifact") {
+            parameter("platform", "Android")
+            parameters {
+                append("platform", "Android")
+            }
+        }.apply {
+            assertEquals(HttpStatusCode.NotFound, status)
+        }
+    }
+
+    @Test
+    fun testGetArtifactsForAndroid() = testApplication {
+        TestDatabase().apply {
+            connect()
+            addDummyArtifacts(publishType = PublishType.Release)
         }
         application {
             module(false)

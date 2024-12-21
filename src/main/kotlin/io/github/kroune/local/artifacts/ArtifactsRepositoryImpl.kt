@@ -1,6 +1,7 @@
 package io.github.kroune.local.artifacts
 
 import io.github.kroune.PlatformType
+import io.github.kroune.PublishType
 import io.github.kroune.local.ArtifactsTable
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -21,7 +22,7 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
     override suspend fun uploadArtifact(
         artifactValue: ByteArray,
         branchValue: String,
-        typeValue: String,
+        typeValue: PublishType,
         commitValue: String,
         platformValue: PlatformType
     ) {
@@ -29,7 +30,7 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
             ArtifactsTable.insert {
                 it[artifacts] = ExposedBlob(artifactValue)
                 it[branch] = branchValue
-                it[type] = typeValue
+                it[type] = typeValue.encodeToString()
                 it[commit] = commitValue
                 it[timeStamp] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                 it[platform] = platformValue.encodeToString()
@@ -39,7 +40,7 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
 
     override suspend fun getArtifact(
         branchValue: String?,
-        typeValue: String?,
+        typeValue: PublishType?,
         commitValue: String?,
         platformType: PlatformType
     ): ByteArray? {
@@ -52,7 +53,7 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
                         Op.TRUE)
                 val type =
                     (if (typeValue != null)
-                        (ArtifactsTable.type eq typeValue)
+                        (ArtifactsTable.type eq typeValue.encodeToString())
                     else
                         Op.TRUE)
                 val commit =
@@ -67,20 +68,20 @@ class ArtifactsRepositoryImpl : ArtifactsRepositoryI {
         }
     }
 
-    override suspend fun getLatestArtifact(typeValue: String): ByteArray? {
+    override suspend fun getLatestArtifact(typeValue: PublishType): ByteArray? {
         return newSuspendedTransaction {
             ArtifactsTable.select(ArtifactsTable.artifacts).where {
-                (ArtifactsTable.type eq typeValue)
+                (ArtifactsTable.type eq typeValue.encodeToString())
             }.orderBy(ArtifactsTable.timeStamp, SortOrder.DESC).limit(1).map {
                 it[ArtifactsTable.artifacts].bytes
             }.firstOrNull()
         }
     }
 
-    override suspend fun deleteArtifact(branchValue: String, typeValue: String, commitValue: String): Int {
+    override suspend fun deleteArtifact(branchValue: String, typeValue: PublishType, commitValue: String): Int {
         return newSuspendedTransaction {
             ArtifactsTable.deleteWhere {
-                (branch eq branchValue) and (type eq typeValue) and (commit eq commitValue)
+                (branch eq branchValue) and (type eq typeValue.encodeToString()) and (commit eq commitValue)
             }
         }
     }
