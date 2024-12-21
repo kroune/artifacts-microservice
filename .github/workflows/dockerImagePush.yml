@@ -20,8 +20,8 @@ jobs:
         run: |
           sudo mkdir /etc/artifacts-server/
           sudo chmod -R ugo+rws /etc/artifacts-server/
-          touch /etc/artifacts-server/config.yaml
-          echo -n ${{ secrets.TEST_CONFIG }} | base64 -d  >> /etc/artifacts-server/config.yaml
+          touch /etc/artifacts-server/config.json
+          echo -n ${{ secrets.TEST_CONFIG }} | base64 -d  >> /etc/artifacts-server/config.json
       - name: Run tests
         run: gradle test
       - name: Build jar
