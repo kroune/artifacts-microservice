@@ -21,26 +21,26 @@ fun Application.configureRouting() {
                 val branch = parameters["branch"]
 
                 if (authToken != currentConfig.authToken) {
-                    call.respond(HttpStatusCode.Unauthorized)
+                    call.respond(HttpStatusCode.Unauthorized, "[auth_token] is invalid")
                     return@post
                 }
                 if (commit == null || branch == null || type == null || platform == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, "one of query parameters is null")
                     return@post
                 }
                 val resolvedPlatform = platform.decodeToPlatformType()
                 if (resolvedPlatform == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, "[platform] type wasn't resolved")
                     return@post
                 }
                 val resolvedType = type.decodeToPublishType()
                 if (resolvedType == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, "[type] is invalid")
                     return@post
                 }
                 val file = call.receive<ByteArray>()
                 if (file.isEmpty()) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, "content is empty")
                     return@post
                 }
                 artifactsRepository.uploadArtifact(
@@ -59,7 +59,7 @@ fun Application.configureRouting() {
                 val branch = call.parameters["branch"]
                 val platform = call.parameters["platform"]?.decodeToPlatformType()
                 if (platform == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, "[platform] type wasn't resolved")
                     return@get
                 }
                 val resolvedType = type?.decodeToPublishType() ?: PublishType.Release
