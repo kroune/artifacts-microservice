@@ -38,7 +38,7 @@ val loggerInstance: Logger = openTelemetryLogger
 
 fun log(
     text: String,
-    severity: Severity,
+    severity: Severity = Severity.DEBUG,
     throwable: Throwable? = null
 ) {
     val sdf = SimpleDateFormat("hh:mm:ss dd/M/yyyy ")

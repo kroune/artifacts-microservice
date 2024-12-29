@@ -2,6 +2,7 @@ package io.github.kroune
 
 import io.github.kroune.ConfigurationLoader.currentConfig
 import io.github.kroune.local.artifactsRepository
+import io.github.kroune.logger.log
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -21,25 +22,30 @@ fun Application.configureRouting() {
                 val branch = parameters["branch"]
 
                 if (authToken != currentConfig.authToken) {
+                    log("[auth_token] is invalid")
                     call.respond(HttpStatusCode.Unauthorized, "[auth_token] is invalid")
                     return@post
                 }
                 if (commit == null || branch == null || type == null || platform == null) {
+                    log("one of query parameters is null")
                     call.respond(HttpStatusCode.BadRequest, "one of query parameters is null")
                     return@post
                 }
                 val resolvedPlatform = platform.decodeToPlatformType()
                 if (resolvedPlatform == null) {
+                    log("[platform] type wasn't resolved")
                     call.respond(HttpStatusCode.BadRequest, "[platform] type wasn't resolved")
                     return@post
                 }
                 val resolvedType = type.decodeToPublishType()
                 if (resolvedType == null) {
+                    log("[type] is invalid")
                     call.respond(HttpStatusCode.BadRequest, "[type] is invalid")
                     return@post
                 }
                 val file = call.receive<ByteArray>()
                 if (file.isEmpty()) {
+                    log("content is empty")
                     call.respond(HttpStatusCode.BadRequest, "content is empty")
                     return@post
                 }
@@ -59,6 +65,7 @@ fun Application.configureRouting() {
                 val branch = call.parameters["branch"]
                 val platform = call.parameters["platform"]?.decodeToPlatformType()
                 if (platform == null) {
+                    log("[platform] type wasn't resolved")
                     call.respond(HttpStatusCode.BadRequest, "[platform] type wasn't resolved")
                     return@get
                 }
@@ -71,6 +78,7 @@ fun Application.configureRouting() {
                         platformType = platform
                     )
                 if (artifact == null) {
+                    log("artifact not found")
                     call.respond(HttpStatusCode.NotFound)
                     return@get
                 }
