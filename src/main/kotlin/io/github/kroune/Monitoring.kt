@@ -2,7 +2,6 @@ package io.github.kroune
 
 import dev.hayden.KHealth
 import io.github.kroune.logger.identifier
-import io.github.kroune.logger.openTelemetryEndpoint
 import io.github.kroune.logger.openTelemetryLogger
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -35,7 +34,7 @@ fun Application.configureMonitoring() {
                 .addSpanProcessor(
                     BatchSpanProcessor.builder(
                         OtlpGrpcSpanExporter.builder()
-                            .setEndpoint(openTelemetryEndpoint)
+                            .setEndpoint(ConfigurationLoader.currentConfig.serviceLocator.otlp.url)
                             .setCompression("gzip")
                             .setRetryPolicy(RetryPolicy.getDefault())
                             .build()

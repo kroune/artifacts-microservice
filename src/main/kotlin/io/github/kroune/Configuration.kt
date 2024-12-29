@@ -38,7 +38,13 @@ object ConfigurationLoader {
 
     @Serializable
     class ServiceLocator(
-        val postgres: PostgresConfig
+        val postgres: PostgresConfig,
+        val otlp: OtlpConfig
+    )
+
+    @Serializable
+    class OtlpConfig(
+        val url: String
     )
 
     @Serializable
