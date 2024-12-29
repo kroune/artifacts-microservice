@@ -9,6 +9,10 @@ sealed class PlatformType {
 
     data object Web : PlatformType()
 
+    data object Ios : PlatformType()
+
+    data object Jar: PlatformType()
+
     data object Android : PlatformType()
 
     fun encodeToString(): String {
