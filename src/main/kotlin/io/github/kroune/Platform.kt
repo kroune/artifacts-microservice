@@ -1,17 +1,23 @@
 package io.github.kroune
 
 sealed class PlatformType {
-    data object Windows : PlatformType()
+    data object WindowsExe : PlatformType()
 
-    data object Linux : PlatformType()
+    data object WindowsMsi : PlatformType()
 
-    data object Macos : PlatformType()
+    data object LinuxDeb : PlatformType()
+
+    data object LinuxRpm : PlatformType()
+
+    data object MacosPkg : PlatformType()
+
+    data object MacosDmg : PlatformType()
 
     data object Web : PlatformType()
 
     data object Ios : PlatformType()
 
-    data object Jar: PlatformType()
+    data object Jar : PlatformType()
 
     data object Android : PlatformType()
 

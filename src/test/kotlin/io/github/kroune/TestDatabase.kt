@@ -26,14 +26,14 @@ class TestDatabase {
             branch,
             publishType,
             "commitId",
-            PlatformType.Linux
+            PlatformType.LinuxDeb
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-macos.dmg")!!.readBytes(),
             branch,
             publishType,
             "commitId",
-            PlatformType.Macos
+            PlatformType.MacosDmg
         )
         artifactsRepository.uploadArtifact(
             this.javaClass.getResource("/artifacts/nineMensMorris-1.0.0-web.zip")!!.readBytes(),
@@ -47,7 +47,7 @@ class TestDatabase {
             branch,
             publishType,
             "commitId",
-            PlatformType.Windows
+            PlatformType.WindowsExe
         )
     }
 
